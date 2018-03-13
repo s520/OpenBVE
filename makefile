@@ -109,6 +109,9 @@ TRAIN_EDITOR_FILE     :=TrainEditor.exe
 LBAHEADER_ROOT        :=source/DevTools/LBAHeader
 LBAHEADER_FILE        :=DevTools/LBAHeader.exe
 
+WINPLUGINPROXY_ROOT        :=source/WinPluginProxy
+WINPLUGINPROXY_FILE        :=WinPluginProxy.exe
+
 # Dependences 
 DEBUG_DEPEND := $(patsubst dependencies/%,$(DEBUG_DIR)/%,$(wildcard dependencies/*))
 RELEASE_DEPEND := $(patsubst dependencies/%,$(RELEASE_DIR)/%,$(wildcard dependencies/*))
@@ -158,6 +161,7 @@ all-debug: $(DEBUG_DIR)/$(OBJECT_VIEWER_FILE)
 all-debug: $(DEBUG_DIR)/$(ROUTE_VIEWER_FILE)
 all-debug: $(DEBUG_DIR)/$(TRAIN_EDITOR_FILE)
 all-debug: $(DEBUG_DIR)/$(LBAHEADER_FILE)
+all-debug: $(DEBUG_DIR)/$(WINPLUGINPROXY_FILE)
 all-debug: copy_depends
 
 all-release: print_csc_type
@@ -170,6 +174,7 @@ all-release: $(RELEASE_DIR)/$(OBJECT_VIEWER_FILE)
 all-release: $(RELEASE_DIR)/$(ROUTE_VIEWER_FILE)
 all-release: $(RELEASE_DIR)/$(TRAIN_EDITOR_FILE)
 all-release: $(RELEASE_DIR)/$(LBAHEADER_FILE)
+all-release: $(RELEASE_DIR)/$(WINPLUGINPROXY_FILE)
 all-release: copy_release_depends
 
 CP_UPDATE_FLAG = -u
@@ -220,6 +225,7 @@ clean:
 	rm -f bin*/OpenBveObjectValidator.exe* bin*/OpenBveObjectValidator.pdb
 	rm -f bin*/RouteViewer.exe* bin*/RouteViewer.pdb
 	rm -f bin*/TrainEditor.exe* bin*/TrainEditor.pdb
+	rm -f bin*/WinPluginProxy.exe* bin*/WinPluginProxy.pdb
 
 	# DLL
 	rm -f bin*/OpenBveApi.dll* bin*/OpenBveApi.pdb
@@ -338,7 +344,7 @@ $(DEBUG_DIR)/$(OPEN_BVE_FILE) $(RELEASE_DIR)/$(OPEN_BVE_FILE): $(OPEN_BVE_ROOT)/
 	$(OPEN_BVE_ROOT)/Properties/AssemblyInfo.cs \
 	/reference:$(OUTPUT_DIR)/OpenTK.dll /reference:$(OPEN_BVE_API_OUT) \
 	/reference:$(OUTPUT_DIR)/CSScriptLibrary.dll /reference:$(OUTPUT_DIR)/NUniversalCharDet.dll /reference:$(OUTPUT_DIR)/SharpCompress.Unsigned.dll /reference:$(OUTPUT_DIR)/PIEHid32Net.dll \
-	/reference:System.Core.dll /reference:System.dll \
+	/reference:System.Core.dll /reference:System.Data.dll /reference:System.ServiceModel.dll /reference:System.dll \
 	/win32icon:$(ICON) $(addprefix /resource:, $(OPEN_BVE_RESOURCE))
 	@echo $(COLOR_GREEN)Adding LBA Flag to executable $(COLOR_CYAN)$(OPEN_BVE_OUT)$(COLOR_END)
 	@mono $(LBAHEADER_OUT) ${OPEN_BVE_OUT} > /dev/null
@@ -365,7 +371,7 @@ $(DEBUG_DIR)/$(OPEN_BVE_API_FILE) $(RELEASE_DIR)/$(OPEN_BVE_API_FILE): $(OPEN_BV
 	@echo $(COLOR_MAGENTA)Building $(COLOR_CYAN)$(OPEN_BVE_API_OUT)$(COLOR_END)
 	@$(CSC) /out:$(OPEN_BVE_API_OUT) /target:library $(OPEN_BVE_API_SRC) $(ARGS) $(OPEN_BVE_API_DOC) \
 	/reference:$(OUTPUT_DIR)/CSScriptLibrary.dll /reference:$(OUTPUT_DIR)/NUniversalCharDet.dll /reference:$(OUTPUT_DIR)/SharpCompress.Unsigned.dll \
-	/reference:System.Core.dll /reference:System.dll \
+	/reference:System.Core.dll /reference:System.Runtime.Serialization.dll /reference:System.dll \
 	$(addprefix /resource:, $(OPEN_BVE_API_RESOURCE))
 
 
@@ -596,3 +602,21 @@ LBAHEADER_OUT       =$(OUTPUT_DIR)/$(LBAHEADER_FILE)
 $(DEBUG_DIR)/$(LBAHEADER_FILE) $(RELEASE_DIR)/$(LBAHEADER_FILE): $(LBAHEADER_SRC)
 	@echo $(COLOR_MAGENTA)Building $(COLOR_CYAN)$(LBAHEADER_OUT)$(COLOR_END)
 	@$(CSC) /out:$(LBAHEADER_OUT) /target:winexe /main:LBAHeader.FixLBAHeader $(LBAHEADER_SRC) $(ARGS)
+	
+##################
+# WinPluginProxy #
+##################
+
+WINPLUGINPROXY_FOLDERS  := .
+WINPLUGINPROXY_FOLDERS  := $(addprefix $(WINPLUGINPROXY_ROOT)/, $(WINPLUGINPROXY_FOLDERS))
+WINPLUGINPROXY_SRC      := $(foreach sdir, $(WINPLUGINPROXY_FOLDERS), $(wildcard $(sdir)/*.cs))
+WINPLUGINPROXY_OUT       =$(OUTPUT_DIR)/$(WINPLUGINPROXY_FILE)
+
+$(DEBUG_DIR)/$(OBJECT_VIEWER_FILE): $(DEBUG_DIR)/$(OPEN_BVE_FILE)
+$(RELEASE_DIR)/$(OBJECT_VIEWER_FILE): $(RELEASE_DIR)/$(OPEN_BVE_FILE)
+
+$(DEBUG_DIR)/$(WINPLUGINPROXY_FILE) $(RELEASE_DIR)/$(WINPLUGINPROXY_FILE): $(WINPLUGINPROXY_SRC) $(WINPLUGINPROXY_RESOURCE)
+	@echo $(COLOR_MAGENTA)Building $(COLOR_CYAN)$(WINPLUGINPROXY_OUT)$(COLOR_END)
+	@$(CSC) /out:$(WINPLUGINPROXY_OUT) /target:winexe /main:WCFServer.AtsPluginProxyService.Program $(WINPLUGINPROXY_SRC) $(ARGS) $(WINPLUGINPROXY_DOC) \
+	/reference:$(OPEN_BVE_API_OUT) /reference:$(OPEN_BVE_OUT) /reference:System.Core.dll /reference:System.ServiceModel.dll /reference:System.dll \
+	/win32icon:$(ICON) $(addprefix /resource:, $(WINPLUGINPROXY_RESOURCE))
