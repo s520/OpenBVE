@@ -72,7 +72,7 @@ namespace OpenBve {
 		{
 			//EndJump is not relevant to legacy plugins, but we must implement it as an API member
 		}
-		internal override void Elapse(ElapseData data)
+		internal override void Elapse(ref ElapseData data)
 		{
 			ElapseProxy e = new ElapseProxy(data);
 			ElapseProxy proxyData = pluginProxy.elapse(e);
@@ -114,6 +114,8 @@ namespace OpenBve {
 						}
 					}
 				}
+
+			data = proxyData.Data;
 		}
 		internal override void SetReverser(int reverser) {
 			pluginProxy.setReverser(reverser);
