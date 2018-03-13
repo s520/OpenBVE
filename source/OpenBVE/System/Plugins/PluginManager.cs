@@ -621,7 +621,7 @@ namespace OpenBve {
 				Interface.AddMessage(Interface.MessageType.Error, false, "The train plugin " + pluginTitle + " could not be read due to the following reason: " + ex.Message);
 				return false;
 			}
-			if (!Program.CurrentlyRunningOnWindows | IntPtr.Size != 4) {
+			if (!Program.CurrentlyRunningOnWindows) {
 				Interface.AddMessage(Interface.MessageType.Warning, false, "The train plugin " + pluginTitle + " can only be used on 32-bit Microsoft Windows or compatible.");
 				return false;
 			}
@@ -630,7 +630,8 @@ namespace OpenBve {
 				Interface.AddMessage(Interface.MessageType.Warning, false, "AtsPluginProxy.dll is missing or corrupt- Please reinstall.");
 				return false;
 			}
-			train.Plugin = new Win32Plugin(pluginFile, train);
+
+			train.Plugin = new ProxyPlugin(pluginFile, train);
 			if (train.Plugin.Load(specs, mode)) {
 				return true;
 			} else {

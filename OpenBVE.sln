@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevTools", "DevTools", "{3D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarXMLConvertor", "source\CarXMLConvertor\CarXMLConvertor.csproj", "{55901EEC-6FB3-4FB6-BDD9-C0E1042F3FBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinPluginProxy", "source\WinPluginProxy\WinPluginProxy.csproj", "{4139B1B5-65A2-4199-A803-BA02C294F583}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -198,6 +200,18 @@ Global
 		{55901EEC-6FB3-4FB6-BDD9-C0E1042F3FBB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{55901EEC-6FB3-4FB6-BDD9-C0E1042F3FBB}.Release|x86.ActiveCfg = Release|Any CPU
 		{55901EEC-6FB3-4FB6-BDD9-C0E1042F3FBB}.Release|x86.Build.0 = Release|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Debug|x86.Build.0 = Debug|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Release|x86.ActiveCfg = Release|Any CPU
+		{4139B1B5-65A2-4199-A803-BA02C294F583}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -209,5 +223,8 @@ Global
 		{15142E7B-35F5-4E81-AA18-79C4D60B4C26} = {16553295-E70F-4596-AA78-848EEA576C4A}
 		{06D89847-9C7A-47D5-8C7A-95AEBFFF5F1E} = {16553295-E70F-4596-AA78-848EEA576C4A}
 		{E9B64673-65B7-4D77-A4DB-4B441A7C9197} = {3D6660F8-52D2-4A30-8F1E-1922DDCF10F9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3D5F76F-4B4A-4EB2-BBF0-E687A0BA2C99}
 	EndGlobalSection
 EndGlobal

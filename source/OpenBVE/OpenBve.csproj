@@ -43,7 +43,7 @@
     <DebugType>Full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\bin_debug\</OutputPath>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -104,6 +104,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -260,6 +261,8 @@
     <Compile Include="System\Logging\BlackBox.cs" />
     <Compile Include="System\Logging\Score.cs" />
     <Compile Include="System\Options.cs" />
+    <Compile Include="System\Plugins\PluginManager.ProxyPlugin.cs" />
+    <Compile Include="System\Plugins\PluginProxy.cs" />
     <Compile Include="System\Program\CommandLine.cs" />
     <Compile Include="System\Translations\InterfaceStrings.cs" />
     <Compile Include="System\Translations\KeyInfo.cs" />
