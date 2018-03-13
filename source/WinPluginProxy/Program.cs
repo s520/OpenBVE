@@ -381,20 +381,20 @@ namespace WCFServer
 			internal float Distance;
 			internal int Optional;
 		}
+	}
 
-		class Program
+	class Program
+	{
+		static void Main(string[] args)
 		{
-			static void Main(string[] args)
+			using (ServiceHost host = new ServiceHost(typeof(AtsPluginProxyService), new Uri(@"net.pipe://localhost")))
 			{
-				using (ServiceHost host = new ServiceHost(typeof(AtsPluginProxyService), new Uri(@"net.pipe://localhost")))
-				{
-					host.AddServiceEndpoint(typeof(IAtsPluginProxy), new NetNamedPipeBinding(), @"pipename");
-					host.Open();
-					InteropShared.eventHostReady.Set();
-					Console.WriteLine(@"ATS Plugin Proxy Service is available.");
-					InteropShared.eventHostShouldStop.WaitOne();
-					host.Close();
-				}
+				host.AddServiceEndpoint(typeof(IAtsPluginProxy), new NetNamedPipeBinding(), @"pipename");
+				host.Open();
+				InteropShared.eventHostReady.Set();
+				Console.WriteLine(@"ATS Plugin Proxy Service is available.");
+				InteropShared.eventHostShouldStop.WaitOne();
+				host.Close();
 			}
 		}
 	}

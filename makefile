@@ -617,6 +617,6 @@ $(RELEASE_DIR)/$(OBJECT_VIEWER_FILE): $(RELEASE_DIR)/$(OPEN_BVE_FILE)
 
 $(DEBUG_DIR)/$(WINPLUGINPROXY_FILE) $(RELEASE_DIR)/$(WINPLUGINPROXY_FILE): $(WINPLUGINPROXY_SRC) $(WINPLUGINPROXY_RESOURCE)
 	@echo $(COLOR_MAGENTA)Building $(COLOR_CYAN)$(WINPLUGINPROXY_OUT)$(COLOR_END)
-	@$(CSC) /out:$(WINPLUGINPROXY_OUT) /target:winexe /main:WCFServer.AtsPluginProxyService.Program $(WINPLUGINPROXY_SRC) $(ARGS) $(WINPLUGINPROXY_DOC) \
+	@$(CSC) /out:$(WINPLUGINPROXY_OUT) /target:winexe /main:WCFServer.Program $(WINPLUGINPROXY_SRC) $(ARGS) $(WINPLUGINPROXY_DOC) \
 	/reference:$(OPEN_BVE_API_OUT) /reference:$(OPEN_BVE_OUT) /reference:System.Core.dll /reference:System.ServiceModel.dll /reference:System.dll \
 	/win32icon:$(ICON) $(addprefix /resource:, $(WINPLUGINPROXY_RESOURCE))

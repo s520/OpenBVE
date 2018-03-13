@@ -1086,24 +1086,31 @@ namespace OpenBveApi.Runtime {
 	// --- set signal ---
 	
 	/// <summary>Represents information about a signal or section.</summary>
+	[DataContract]
 	public class SignalData {
 		// --- members ---
 		/// <summary>The aspect of the signal or section.</summary>
+		[DataMember]
 		private readonly int MyAspect;
 		/// <summary>The underlying section. Possible values are 0 for the current section, 1 for the upcoming section, or higher values for sections further ahead.</summary>
+		[DataMember]
 		private readonly double MyDistance;
 		// --- properties ---
 		/// <summary>Gets the aspect of the signal or section.</summary>
+		[DataMember]
 		public int Aspect {
 			get {
 				return this.MyAspect;
 			}
+			set {}
 		}
 		/// <summary>Gets the distance to the signal or section.</summary>
+		[DataMember]
 		public double Distance {
 			get {
 				return this.MyDistance;
 			}
+			set {}
 		}
 		// --- constructors ---
 		/// <summary>Creates a new instance of this class.</summary>
@@ -1138,6 +1145,7 @@ namespace OpenBveApi.Runtime {
 			get {
 				return this.MyType;
 			}
+			set {}
 		}
 		/// <summary>Gets optional data the beacon transmits.</summary>
 		[DataMember]
@@ -1145,6 +1153,7 @@ namespace OpenBveApi.Runtime {
 			get {
 				return this.MyOptional;
 			}
+			set {}
 		}
 		/// <summary>Gets the section the beacon is attached to.</summary>
 		[DataMember]
@@ -1152,6 +1161,7 @@ namespace OpenBveApi.Runtime {
 			get {
 				return this.MySignal;
 			}
+			set {}
 		}
 		// --- constructors ---
 		/// <summary>Creates a new instance of this class.</summary>
