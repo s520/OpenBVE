@@ -28,8 +28,10 @@ endif
 RESGEN := resgen
 
 # Standard Arguments
-DEBUG_ARGS   := /noconfig /debug:Full /debug+ /optimize- /warnaserror- /unsafe+ /define:"DEBUG;TRACE" /platform:x86 /warn:4 /pkg:dotnet
-RELEASE_ARGS := /noconfig /debug- /optimize+ /unsafe+ /checked- /define:"TRACE" /platform:x86 /warn:4 /pkg:dotnet
+DEBUG_ARGS   := /noconfig /debug:Full /debug+ /optimize- /warnaserror- /unsafe+ /define:"DEBUG;TRACE" /platform:anycpu /warn:4 /pkg:dotnet
+RELEASE_ARGS := /noconfig /debug- /optimize+ /unsafe+ /checked- /define:"TRACE" /platform:anycpu /warn:4 /pkg:dotnet
+DEBUG_X86_ARGS   := /noconfig /debug:Full /debug+ /optimize- /warnaserror- /unsafe+ /define:"DEBUG;TRACE" /platform:anycpu /warn:4 /pkg:dotnet
+RELEASE_X86_ARGS := /noconfig /debug- /optimize+ /unsafe+ /checked- /define:"TRACE" /platform:anycpu /warn:4 /pkg:dotnet
 
 # Directories
 DEBUG_DIR   := bin_debug
@@ -50,6 +52,7 @@ endif
 
 # Current Args
 ARGS := $(DEBUG_ARGS)
+X86_ARGS := $(DEBUG_X86_ARGS)
 
 # Thumbnail
 ICON := assets/icon.ico
@@ -147,6 +150,7 @@ openbve-debug: copy_depends
 
 openbve-release: print_csc_type
 openbve-release: ARGS := $(RELEASE_ARGS)
+openbve-release: X86_ARGS := $(RELEASE_X86_ARGS)
 openbve-release: OUTPUT_DIR := $(RELEASE_DIR)
 openbve-release: $(RELEASE_DIR)/$(OPEN_BVE_FILE)
 openbve-release: copy_release_depends
@@ -166,6 +170,7 @@ all-debug: copy_depends
 
 all-release: print_csc_type
 all-release: ARGS := $(RELEASE_ARGS)
+all-release: X86_ARGS := $(RELEASE_X86_ARGS)
 all-release: OUTPUT_DIR := $(RELEASE_DIR)
 all-release: $(RELEASE_DIR)/$(OPEN_BVE_FILE)
 all-release: $(RELEASE_DIR)/$(OBJECT_BENDER_FILE)
@@ -617,6 +622,6 @@ $(RELEASE_DIR)/$(OBJECT_VIEWER_FILE): $(RELEASE_DIR)/$(OPEN_BVE_FILE)
 
 $(DEBUG_DIR)/$(WINPLUGINPROXY_FILE) $(RELEASE_DIR)/$(WINPLUGINPROXY_FILE): $(WINPLUGINPROXY_SRC) $(WINPLUGINPROXY_RESOURCE)
 	@echo $(COLOR_MAGENTA)Building $(COLOR_CYAN)$(WINPLUGINPROXY_OUT)$(COLOR_END)
-	@$(CSC) /out:$(WINPLUGINPROXY_OUT) /target:winexe /main:WCFServer.Program $(WINPLUGINPROXY_SRC) $(ARGS) $(WINPLUGINPROXY_DOC) \
+	@$(CSC) /out:$(WINPLUGINPROXY_OUT) /target:winexe /main:WCFServer.Program $(WINPLUGINPROXY_SRC) $(X86_ARGS) $(WINPLUGINPROXY_DOC) \
 	/reference:$(OPEN_BVE_API_OUT) /reference:$(OPEN_BVE_OUT) /reference:System.Core.dll /reference:System.ServiceModel.dll /reference:System.dll \
 	/win32icon:$(ICON) $(addprefix /resource:, $(WINPLUGINPROXY_RESOURCE))
