@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpenBve\OpenBve.csproj">
+    <ProjectReference Include="..\OpenBVE\OpenBve.csproj">
       <Project>{34743421-2EB8-4F68-9600-AEAE79AECFA5}</Project>
       <Name>OpenBve</Name>
     </ProjectReference>
