@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Threading;
 using OpenBveApi.Runtime;
+using OpenBveApi.Interop;
 
 namespace OpenBve
 {
@@ -27,54 +28,7 @@ namespace OpenBve
         public static Uri endpointAddress { get { return new Uri(pipeBaseAddress + '/' + pipeName); } }
 
     }
-    [ServiceContract]
-    public interface IAtsPluginProxy
-    {
-        [OperationContract]
-        int WCFGetStatus();
-
-	    [OperationContract]
-	    int SetPluginFile(string fileName);
-
-	    [OperationContract]
-	    bool Load(VehicleSpecs specs, InitializationModes mode);
-
-	    [OperationContract]
-	    void Unload();
-
-	    [OperationContract]
-	    void BeginJump(InitializationModes mode);
-
-	    [OperationContract]
-	    ElapseProxy Elapse(ElapseProxy proxyData);
-
-	    [OperationContract]
-	    void SetReverser(int reverser);
-
-	    [OperationContract]
-	    void SetPowerNotch(int powerNotch);
-
-	    [OperationContract]
-	    void SetBrake(int brakeNotch);
-
-	    [OperationContract]
-	    void KeyDown(int key);
-
-	    [OperationContract]
-	    void KeyUp(int key);
-
-	    [OperationContract]
-	    void HornBlow(int type);
-
-	    [OperationContract]
-	    void DoorChange(int oldState, int newState);
-
-	    [OperationContract]
-	    void SetSignal(int aspect);
-
-	    [OperationContract]
-	    void SetBeacon(BeaconData beacon);
-    };
+    
 
     [Guid("1388460c-fc46-46f0-9a3a-98624f6304bd")]
     public interface IAtsPlugin
