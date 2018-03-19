@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.ServiceModel;
 using OpenBveApi.Runtime;
 using OpenBveApi.Interop;
-using OpenBve;
 
 namespace WCFServer
 {
@@ -12,11 +11,6 @@ namespace WCFServer
 	{
 
 		private string PluginFile;
-
-		public int WCFGetStatus()
-		{
-			return -1;
-		}
 
 		public void SetPluginFile(string fileName)
 		{
@@ -30,30 +24,30 @@ namespace WCFServer
 			try {
 				result = Win32LoadDLL(this.PluginFile, this.PluginFile);
 			} catch (Exception ex) {
-				//base.LastException = ex;
+				Callback.ReportError("Error loading Win32 plugin: " + ex);
 				throw;
 			}
 			if (result == 0) {
 				int errorCode = Marshal.GetLastWin32Error();
 				string errorMessage = new Win32Exception(errorCode).Message;
-				//Interface.AddMessage(Interface.MessageType.Error, true, String.Format("Error loading Win32 plugin: {0} (0x{1})", errorMessage, errorCode.ToString("x")));
+				Callback.ReportError(String.Format("Error loading Win32 plugin: {0} (0x{1})", errorMessage, errorCode.ToString("x")));
 				return false;
 			}
 			try {
 				Win32Load();
 			} catch (Exception ex) {
-				//base.LastException = ex;
+				Callback.ReportError("Error loading Win32 plugin: " + ex);
 				return false;
 			}
 			int version;
 			try {
 				version = Win32GetPluginVersion();
 			} catch (Exception ex) {
-				//base.LastException = ex;
+				Callback.ReportError("Error loading Win32 plugin: " + ex);
 				throw;
 			}
 			if (version != 131072) {
-				//Interface.AddMessage(Interface.MessageType.Error, false, "The train plugin " + base.PluginTitle + " is of an unsupported version.");
+				Callback.ReportError("Win32 plugin " + PluginFile + " is of an unsupported version.");
 				try {
 					Win32Dispose();
 				} catch (Exception ex)
@@ -73,12 +67,14 @@ namespace WCFServer
 				Win32SetVehicleSpec(ref win32Spec.BrakeNotches);
 			} catch (Exception ex)
 			{
+				Callback.ReportError("Error loading Win32 plugin: " + ex);
 				return false;
 			}
 			try {
 				Win32Initialize((int)mode);
 			} catch (Exception ex)
 			{
+				Callback.ReportError("Error loading Win32 plugin: " + ex);
 				return false;
 			}
 			Console.WriteLine(@"Plugin loaded successfully.");
@@ -90,7 +86,7 @@ namespace WCFServer
 			try {
 				Win32UnloadDLL();
 			} catch (Exception ex) {
-				//Log ex
+				Callback.ReportError(ex.ToString());
 			}
 		}
 
@@ -99,6 +95,7 @@ namespace WCFServer
 			try {
 				Win32Initialize((int)mode);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
 			}
 		}
 
@@ -150,9 +147,9 @@ namespace WCFServer
 					}
 				}
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				Console.WriteLine(e.ToString());
+				Callback.ReportError(ex.ToString());
 			}
 			
 			return ProxyData;
@@ -160,9 +157,11 @@ namespace WCFServer
 
 		public void SetReverser(int reverser)
 		{
+			Callback.ReportError("test");
 			try {
 				Win32SetReverser(reverser);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
 			}
 		}
 		
@@ -171,6 +170,7 @@ namespace WCFServer
 			try {
 				Win32SetPower(powerNotch);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
 			}
 		}
 
@@ -179,6 +179,7 @@ namespace WCFServer
 			try {
 				Win32SetBrake(brakeNotch);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
 			}
 		}
 
@@ -187,6 +188,7 @@ namespace WCFServer
 			try {
 				Win32KeyDown(key);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
 			}
 		}
 
@@ -195,6 +197,7 @@ namespace WCFServer
 			try {
 				Win32KeyUp(key);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
 			}
 		}
 
@@ -203,6 +206,7 @@ namespace WCFServer
 			try {
 				Win32HornBlow(type);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
 			}
 		}
 
@@ -212,11 +216,13 @@ namespace WCFServer
 				try {
 					Win32DoorOpen();
 				} catch (Exception ex) {
+					Callback.ReportError(ex.ToString());
 				}
 			} else if (oldState != 0 & newState == 0) {
 				try {
 					Win32DoorClose();
 				} catch (Exception ex) {
+					Callback.ReportError(ex.ToString());
 				}
 			}
 		}
@@ -226,6 +232,7 @@ namespace WCFServer
 			try {
 				Win32SetSignal(aspect);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
 			}
 		}
 
@@ -239,6 +246,15 @@ namespace WCFServer
 				win32Beacon.Optional = beacon.Optional;
 				Win32SetBeaconData(ref win32Beacon.Type);
 			} catch (Exception ex) {
+				Callback.ReportError(ex.ToString());
+			}
+		}
+
+		IAtsPluginCallback Callback
+		{
+			get
+			{
+				return OperationContext.Current.GetCallbackChannel<IAtsPluginCallback>();
 			}
 		}
 
@@ -333,6 +349,12 @@ namespace WCFServer
 			internal float Distance;
 			internal int Optional;
 		}
+
+		internal void OnClose()
+		{
+
+		}
+		
 	}
 
 	class Program
@@ -341,11 +363,12 @@ namespace WCFServer
 		{
 			using (ServiceHost host = new ServiceHost(typeof(AtsPluginProxyService), new Uri(@"net.pipe://localhost")))
 			{
+
 				host.AddServiceEndpoint(typeof(IAtsPluginProxy), new NetNamedPipeBinding(), @"pipename");
 				host.Open();
-				InteropShared.eventHostReady.Set();
+				Shared.eventHostReady.Set();
 				Console.WriteLine(@"ATS Plugin Proxy Service is available.");
-				InteropShared.eventHostShouldStop.WaitOne();
+				Shared.eventHostShouldStop.WaitOne();
 				host.Close();
 			}
 		}

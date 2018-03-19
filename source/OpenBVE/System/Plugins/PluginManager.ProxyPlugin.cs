@@ -22,7 +22,7 @@ namespace OpenBve {
 		private GCHandle PanelHandle;
 		private GCHandle SoundHandle;
 
-		private Win32ProxyPlugin pluginProxy = new Win32ProxyPlugin();
+		private readonly Win32ProxyPlugin pluginProxy = new Win32ProxyPlugin();
 
 		// --- constructors ---
 		internal ProxyPlugin(string pluginFile, TrainManager.Train train) {
@@ -74,6 +74,18 @@ namespace OpenBve {
 		}
 		internal override void Elapse(ref ElapseData data)
 		{
+			if (pluginProxy.callback.lastError != string.Empty)
+			{
+				Program.AppendToLogFile("ERROR: The proxy plugin " + PluginFile + " generated the following error:");
+				Program.AppendToLogFile(pluginProxy.callback.lastError);
+				pluginProxy.callback.lastError = string.Empty;
+			}
+
+			if (pluginProxy.callback.Unload == true)
+			{
+				this.Unload();
+				return;
+			}
 			ElapseProxy e = new ElapseProxy(data);
 			ElapseProxy proxyData = pluginProxy.elapse(e);
 			base.Panel = proxyData.Panel;

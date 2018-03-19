@@ -1,14 +1,34 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
+using System.Threading;
 using OpenBveApi.Runtime;
 
 namespace OpenBveApi.Interop
 {
-	[ServiceContract]
+	public static class Shared
+	{
+		// Host signals it's ready and listening.
+		public static readonly EventWaitHandle eventHostReady = new EventWaitHandle(false, EventResetMode.AutoReset, @"eventHostReady");
+
+		// Client asks the host to quit.
+		public static readonly EventWaitHandle eventHostShouldStop = new EventWaitHandle(false, EventResetMode.AutoReset, @"eventHostShouldStop");
+
+		public const string pipeBaseAddress = @"net.pipe://localhost";
+
+		/// <summary>Pipe name</summary>
+		public const string pipeName = @"pipename";
+
+		/// <summary>Base addresses for the hosted service.</summary>
+		public static Uri baseAddress { get { return new Uri(pipeBaseAddress); } }
+
+		/// <summary>Complete address of the named pipe endpoint.</summary>
+		public static Uri endpointAddress { get { return new Uri(pipeBaseAddress + '/' + pipeName); } }
+
+	}
+
+	[ServiceContract(CallbackContract = typeof(IAtsPluginCallback))]
 	public interface IAtsPluginProxy
 	{
-		[OperationContract]
-		int WCFGetStatus();
-
 		[OperationContract]
 		void SetPluginFile(string fileName);
 
@@ -51,4 +71,10 @@ namespace OpenBveApi.Interop
 		[OperationContract]
 		void SetBeacon(BeaconData beacon);
 	};
+
+	public interface IAtsPluginCallback
+	{
+		[OperationContract(IsOneWay = true)]
+		void ReportError(string Error);
+	}
 }

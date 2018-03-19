@@ -1,40 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceModel;
-using System.Threading;
 using OpenBveApi.Runtime;
 using OpenBveApi.Interop;
 
 namespace OpenBve
 {
-    public static class InteropShared
-    {
-        // Host signals it's ready and listening.
-        public static readonly EventWaitHandle eventHostReady = new EventWaitHandle(false, EventResetMode.AutoReset, @"eventHostReady");
-
-        // Client asks the host to quit.
-        public static readonly EventWaitHandle eventHostShouldStop = new EventWaitHandle(false, EventResetMode.AutoReset, @"eventHostShouldStop");
-
-        public const string pipeBaseAddress = @"net.pipe://localhost";
-
-        /// <summary>Pipe name</summary>
-        public const string pipeName = @"pipename";
-
-        /// <summary>Base addresses for the hosted service.</summary>
-        public static Uri baseAddress { get { return new Uri(pipeBaseAddress); } }
-
-        /// <summary>Complete address of the named pipe endpoint.</summary>
-        public static Uri endpointAddress { get { return new Uri(pipeBaseAddress + '/' + pipeName); } }
-
-    }
-    
-
     [Guid("1388460c-fc46-46f0-9a3a-98624f6304bd")]
     public interface IAtsPlugin
     {
-        int getStatus();
-
 	    void setPluginFile(string fileName);
 
 	    bool load(VehicleSpecs specs, InitializationModes mode);
@@ -64,18 +38,31 @@ namespace OpenBve
 	    void setBeacon(BeaconData beacon);
     };
 
+	public class Win32CallbackHandler : IAtsPluginCallback
+	{
+		public string lastError = string.Empty;
+		public bool Unload = false;
+
+		public void ReportError(string Error)
+		{
+			this.lastError = Error;
+		}
+	}
+
 	/// <summary>Represents a Win32 plugin proxied through WinPluginProxy</summary>
     [ClassInterface(ClassInterfaceType.None)]
     [Guid("c570f27c-0a86-4d9b-a568-4d4b217caf7b")]
-    public class Win32ProxyPlugin : IAtsPlugin
+    internal class Win32ProxyPlugin : IAtsPlugin
     {
 
-        private static int win32Dll_instances = 0;
-        private static Process hostProcess;
-        private static IAtsPluginProxy pipeProxy;
-        private static object syncLock = new object();
+        private int win32Dll_instances = 0;
+        private readonly Process hostProcess;
+        private readonly IAtsPluginProxy pipeProxy;
+        private readonly object syncLock = new object();
 
-        public Win32ProxyPlugin()
+	    public Win32CallbackHandler callback;
+
+        internal Win32ProxyPlugin()
         {
             lock (syncLock)
             {
@@ -84,7 +71,7 @@ namespace OpenBve
                     hostProcess = new Process();
                     hostProcess.StartInfo.FileName = @"WinPluginProxy.exe";
                     hostProcess.Start();
-                    InteropShared.eventHostReady.WaitOne();
+                    Shared.eventHostReady.WaitOne();
                     pipeProxy = getPipeProxy();
                 }
                 win32Dll_instances++;
@@ -97,25 +84,18 @@ namespace OpenBve
                 win32Dll_instances--;
                 if (win32Dll_instances == 0)
                 {
-                    InteropShared.eventHostShouldStop.Set();
+                    Shared.eventHostShouldStop.Set();
                     hostProcess.WaitForExit();
                 }
             }
         }
-        public static IAtsPluginProxy getPipeProxy()
+        public IAtsPluginProxy getPipeProxy()
         {
-            ChannelFactory<IAtsPluginProxy> pipeFactory =
-              new ChannelFactory<IAtsPluginProxy>(
-                new NetNamedPipeBinding(),
-                new EndpointAddress(
-                    InteropShared.endpointAddress));
+			callback = new Win32CallbackHandler();
+			DuplexChannelFactory<IAtsPluginProxy> pipeFactory = new DuplexChannelFactory<IAtsPluginProxy>(new InstanceContext(callback), new NetNamedPipeBinding(), new EndpointAddress(Shared.endpointAddress));
 
             IAtsPluginProxy pipeProxy = pipeFactory.CreateChannel();
             return pipeProxy;
-        }
-        public int getStatus()
-        {
-            return (int)pipeProxy.WCFGetStatus();
         }
 
 	    public void setPluginFile(string fileName)
