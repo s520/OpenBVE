@@ -118,7 +118,7 @@ namespace OpenBve
 						{
 							plugin.Sound = (OpenBveApi.Sounds.SoundInterface)assembly.CreateInstance(type.FullName);
 						}
-						if (typeof(OpenBveApi.Runtime.IRuntime).IsAssignableFrom(type))
+						if (typeof(OpenBveApi.Runtime.IRuntime).IsAssignableFrom(type) || typeof(OpenBveApi.Runtime.IRuntimeRoute).IsAssignableFrom(type))
 						{
 							iruntime = true;
 						}

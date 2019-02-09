@@ -237,8 +237,8 @@ namespace OpenBve {
 					});
 				// game data
 				Game.Sections = new Game.Section[1];
-				Game.Sections[0].Aspects = new Game.SectionAspect[]
-				{new Game.SectionAspect(0, 0.0), new Game.SectionAspect(4, double.PositiveInfinity)};
+				Game.Sections[0].Aspects = new SectionAspect[]
+				{new SectionAspect(0, 0.0), new SectionAspect(4, double.PositiveInfinity)};
 				Game.Sections[0].CurrentAspect = 0;
 				Game.Sections[0].NextSection = -1;
 				Game.Sections[0].PreviousSection = -1;
@@ -1572,6 +1572,21 @@ namespace OpenBve {
 										}
 									}
 									break;
+								case "route.plugin":
+									{
+										if (!PreviewOnly) {
+											if (Arguments.Length < 1) {
+												Interface.AddMessage(MessageType.Error, false, "" + Command + " is expected to have one argument at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+											} else {
+												string file = OpenBveApi.Path.CombineFile(System.IO.Path.GetDirectoryName(FileName), Arguments[0]);
+												if (!System.IO.File.Exists(file)) {
+													Interface.AddMessage(MessageType.Error, false, "The file " + file + " could not be found at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+													file = string.Empty;
+												}
+												Game.RoutePlugin = file;
+											}
+										}
+									} break;
 									// train
 								case "train.folder":
 								case "train.file":

@@ -94,6 +94,9 @@ FORMATS_DIRECTX_FILE     :=Data/Formats/Formats.DirectX.dll
 OPEN_BVE_ATS_ROOT     :=source/Plugins/OpenBveAts
 OPEN_BVE_ATS_FILE     :=Data/Plugins/OpenBveAts.dll
 
+OPEN_BVE_ROUTE_ROOT     :=source/Plugins/OpenBveRoutePlugin
+OPEN_BVE_ROUTE_FILE     :=Data/Plugins/OpenBveRoutePlugin.dll
+
 SOUND_FLAC_ROOT       :=source/Plugins/Sound.Flac
 SOUND_FLAC_FILE       :=Data/Plugins/Sound.Flac.dll
 
@@ -362,6 +365,7 @@ $(DEBUG_DIR)/$(OPEN_BVE_FILE): $(DEBUG_DIR)/$(ASSIMP_FILE)
 $(DEBUG_DIR)/$(OPEN_BVE_FILE): $(DEBUG_DIR)/$(DEFAULT_DISPLAY_FILE) 
 $(DEBUG_DIR)/$(OPEN_BVE_FILE): $(DEBUG_DIR)/$(SAN_YING_INPUT_FILE) 
 $(DEBUG_DIR)/$(OPEN_BVE_FILE): $(DEBUG_DIR)/$(OPEN_BVE_ATS_FILE) 
+$(DEBUG_DIR)/$(OPEN_BVE_FILE): $(DEBUG_DIR)/$(OPEN_BVE_ROUTE_FILE) 
 $(DEBUG_DIR)/$(OPEN_BVE_FILE): $(DEBUG_DIR)/$(SOUND_FLAC_FILE) 
 $(DEBUG_DIR)/$(OPEN_BVE_FILE): $(DEBUG_DIR)/$(SOUND_RIFFWAVE_FILE) 
 $(DEBUG_DIR)/$(OPEN_BVE_FILE): $(DEBUG_DIR)/$(SOUND_MP3_FILE) 
@@ -378,6 +382,7 @@ $(RELEASE_DIR)/$(OPEN_BVE_FILE): $(RELEASE_DIR)/$(ASSIMP_FILE)
 $(RELEASE_DIR)/$(OPEN_BVE_FILE): $(RELEASE_DIR)/$(DEFAULT_DISPLAY_FILE) 
 $(RELEASE_DIR)/$(OPEN_BVE_FILE): $(RELEASE_DIR)/$(SAN_YING_INPUT_FILE) 
 $(RELEASE_DIR)/$(OPEN_BVE_FILE): $(RELEASE_DIR)/$(OPEN_BVE_ATS_FILE) 
+$(RELEASE_DIR)/$(OPEN_BVE_FILE): $(RELEASE_DIR)/$(OPEN_BVE_ROUTE_FILE) 
 $(RELEASE_DIR)/$(OPEN_BVE_FILE): $(RELEASE_DIR)/$(SOUND_FLAC_FILE) 
 $(RELEASE_DIR)/$(OPEN_BVE_FILE): $(RELEASE_DIR)/$(SOUND_RIFFWAVE_FILE) 
 $(RELEASE_DIR)/$(OPEN_BVE_FILE): $(RELEASE_DIR)/$(SOUND_MP3_FILE) 
@@ -511,6 +516,27 @@ $(DEBUG_DIR)/$(OPEN_BVE_ATS_FILE) $(RELEASE_DIR)/$(OPEN_BVE_ATS_FILE): $(OPEN_BV
 	@echo $(COLOR_MAGENTA)Building $(COLOR_CYAN)$(OPEN_BVE_ATS_OUT)$(COLOR_END)
 	@$(CSC) /out:$(OPEN_BVE_ATS_OUT) /target:library $(OPEN_BVE_ATS_SRC) $(ARGS) $(OPEN_BVE_ATS_DOC) \
 	/reference:$(OPEN_BVE_API_OUT) $(addprefix /resource:, $(OPEN_BVE_ATS_RESOURCE))
+	
+######################
+# OpenBveRoutePlugin #
+######################
+
+OPEN_BVE_ROUTE_FOLDERS  := $(shell find $(OPEN_BVE_ROUTE_ROOT) -type d)
+OPEN_BVE_ROUTE_SRC      := $(foreach sdir, $(OPEN_BVE_ROUTE_FOLDERS), $(wildcard $(sdir)/*.cs))
+OPEN_BVE_ROUTE_DOC      := $(addprefix /doc:, $(foreach sdir, $(OPEN_BVE_ROUTE_FOLDERS), $(wildcard $(sdir)/*.xml)))
+OPEN_BVE_ROUTE_RESX     := $(foreach sdir, $(OPEN_BVE_ROUTE_FOLDERS), $(wildcard $(sdir)/*.resx))
+OPEN_BVE_ROUTE_RESOURCE := $(addprefix $(OPEN_BVE_ROUTE_ROOT)/, $(subst /,., $(subst /./,/, $(patsubst $(dir $(OPEN_BVE_ROUTE_ROOT))%.resx, %.resources, $(OPEN_BVE_ROUTE_RESX)))))
+OPEN_BVE_ROUTE_OUT       =$(OUTPUT_DIR)/$(OPEN_BVE_ROUTE_FILE)
+
+$(call create_resource, $(OPEN_BVE_ROUTE_RESOURCE), $(OPEN_BVE_ROUTE_RESX))
+
+$(DEBUG_DIR)/$(OPEN_BVE_ROUTE_FILE): $(DEBUG_DIR)/$(OPEN_BVE_API_FILE)
+$(RELEASE_DIR)/$(OPEN_BVE_ROUTE_FILE): $(RELEASE_DIR)/$(OPEN_BVE_API_FILE)
+
+$(DEBUG_DIR)/$(OPEN_BVE_ROUTE_FILE) $(RELEASE_DIR)/$(OPEN_BVE_ROUTE_FILE): $(OPEN_BVE_ROUTE_SRC) $(OPEN_BVE_ROUTE_RESOURCE)
+	@echo $(COLOR_MAGENTA)Building $(COLOR_CYAN)$(OPEN_BVE_ROUTE_OUT)$(COLOR_END)
+	@$(CSC) /out:$(OPEN_BVE_ROUTE_OUT) /target:library $(OPEN_BVE_ROUTE_SRC) $(ARGS) $(OPEN_BVE_ROUTE_DOC) \
+	/reference:$(OPEN_BVE_API_OUT) $(addprefix /resource:, $(OPEN_BVE_ROUTE_RESOURCE))
 	
 ################
 # Formats.MSTS #

@@ -14,24 +14,6 @@ namespace OpenBve
 			IndexBased
 		}
 
-		/// <summary>A signalling aspect attached to a track section</summary>
-		internal struct SectionAspect
-		{
-			/// <summary>The aspect number</summary>
-			internal int Number;
-			/// <summary>The speed limit associated with this aspect number</summary>
-			internal double Speed;
-
-			/// <summary>Creates a new signalling aspect</summary>
-			/// <param name="Number">The aspect number</param>
-			/// <param name="Speed">The speed limit</param>
-			internal SectionAspect(int Number, double Speed)
-			{
-				this.Number = Number;
-				this.Speed = Speed;
-			}
-		}
-
 		/// <summary>Defines a complete signalling section</summary>
 		public struct Section
 		{

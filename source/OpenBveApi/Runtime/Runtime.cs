@@ -1005,9 +1005,9 @@ namespace OpenBveApi.Runtime {
 	public class BeaconData {
 		// --- members ---
 		/// <summary>The type of beacon.</summary>
-		private readonly int MyType;
+		protected int MyType;
 		/// <summary>Optional data the beacon transmits.</summary>
-		private readonly int MyOptional;
+		protected int MyOptional;
 		/// <summary>The section the beacon is attached to.</summary>
 		private readonly SignalData MySignal;
 		// --- properties ---

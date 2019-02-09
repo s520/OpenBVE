@@ -619,7 +619,20 @@ namespace OpenBve {
 					return false;
 				}
 				foreach (Type type in types) {
-					if (typeof(IRuntime).IsAssignableFrom(type)) {
+					if (typeof(IRuntimeTrain).IsAssignableFrom(type)) {
+						if (type.FullName == null) {
+							//Should never happen, but static code inspection suggests that it's possible....
+							throw new InvalidOperationException();
+						}
+						IRuntimeTrain api = assembly.CreateInstance(type.FullName) as IRuntimeTrain;
+						train.Plugin = new NetPlugin2(pluginFile, trainFolder, api, train);
+						if (train.Plugin.Load(specs, mode)) {
+							return true;
+						} else {
+							train.Plugin = null;
+							return false;
+						}
+					} else if (typeof(IRuntime).IsAssignableFrom(type)) {
 						if (type.FullName == null)
 						{
 							//Should never happen, but static code inspection suggests that it's possible....

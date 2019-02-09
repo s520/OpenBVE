@@ -60,6 +60,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Texture.Tga", "source\Plugi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssimpParser", "source\AssimpParser\AssimpParser.csproj", "{77CCAE62-D374-468E-98A0-DD8ADB461C10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBveRoutePlugin", "source\Plugins\OpenBveRoutePlugin\OpenBveRoutePlugin.csproj", "{06581733-B15E-4A81-81BF-FC211F46B183}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -320,6 +322,18 @@ Global
 		{77CCAE62-D374-468E-98A0-DD8ADB461C10}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{77CCAE62-D374-468E-98A0-DD8ADB461C10}.Release|x86.ActiveCfg = Release|Any CPU
 		{77CCAE62-D374-468E-98A0-DD8ADB461C10}.Release|x86.Build.0 = Release|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Debug|x86.Build.0 = Debug|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Release|x86.ActiveCfg = Release|Any CPU
+		{06581733-B15E-4A81-81BF-FC211F46B183}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -338,6 +352,7 @@ Global
 		{0C73C749-FCAE-4254-A614-AE1B03AF45C9} = {851ADF1E-4500-4A14-B4AA-C1087A6C537E}
 		{3D833D81-4F14-4A68-B0DE-6469B8CF4E62} = {851ADF1E-4500-4A14-B4AA-C1087A6C537E}
 		{F714A9FA-1C4B-456B-BACF-D6763223A81C} = {16553295-E70F-4596-AA78-848EEA576C4A}
+		{06581733-B15E-4A81-81BF-FC211F46B183} = {16553295-E70F-4596-AA78-848EEA576C4A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {50B52A67-69B1-4B19-A59C-FF058FD9EBDF}

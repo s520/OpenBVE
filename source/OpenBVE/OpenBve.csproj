@@ -321,6 +321,10 @@
     <Compile Include="System\Messages\Message.cs" />
     <Compile Include="System\Messages\Message.MessageType.cs" />
     <Compile Include="System\Options.cs" />
+    <Compile Include="System\Plugins\NetPlugin2.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>PluginManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="System\Program\CommandLine.cs" />
     <Compile Include="UserInterface\formRaildriverCalibration.cs">
       <SubType>Form</SubType>

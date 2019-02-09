@@ -86,6 +86,8 @@
     <Compile Include="Objects\MeshMaterial.BlendMode.cs" />
     <Compile Include="Objects\MeshMaterial.cs" />
     <Compile Include="Objects\UnifiedObject.cs" />
+    <Compile Include="Runtime\Runtime.Route.cs" />
+    <Compile Include="Runtime\Runtime.Train.cs" />
     <Compile Include="System\FileSystem.cs" />
     <Compile Include="Graphics\InterpolationModes.cs" />
     <Compile Include="Graphics\TextAlignment.cs" />

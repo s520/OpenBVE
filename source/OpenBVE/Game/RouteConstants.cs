@@ -42,6 +42,8 @@ namespace OpenBve
 
         internal const double CoefficientOfStiffness = 144117.325646911;
 
+        internal static string RoutePlugin = string.Empty;
+
         /*
          * This group of functions is used to calculate atmospheric constants
          * These are used in determining things such as the speed of sound
