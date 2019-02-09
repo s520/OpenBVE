@@ -168,18 +168,19 @@ namespace OpenBve
 			try
 			{
 #endif
-				Section[] sections = new Section[SectionsLength];
-				for (int i = 0; i < SectionsLength; i++)
+				int start = Train.CurrentSectionIndex >= 0 ? Train.CurrentSectionIndex : 0;
+				Section[] sections = new Section[SectionsLength - start];
+				for (int i = 0; i < SectionsLength - start; i++)
 				{
-					sections[i].Aspects = new SectionAspect[Game.Sections[i].Aspects.Length];
-					Array.Copy(Game.Sections[i].Aspects, sections[i].Aspects, Game.Sections[i].Aspects.Length);
+					sections[i].Aspects = new SectionAspect[Game.Sections[i + start].Aspects.Length];
+					Array.Copy(Game.Sections[i + start].Aspects, sections[i].Aspects, Game.Sections[i + start].Aspects.Length);
 				}
 				ElapseDataRoute routeApiData = new ElapseDataRoute(sections);
 				byte[] sendData;
 				RouteApi.Elapse(routeApiData, out sendData);
-				for (int i = 0; i < SectionsLength; i++)
+				for (int i = 0; i < SectionsLength - start; i++)
 				{
-					Array.Copy(sections[i].Aspects, Game.Sections[i].Aspects, Game.Sections[i].Aspects.Length);
+					Array.Copy(sections[i].Aspects, Game.Sections[i + start].Aspects, Game.Sections[i + start].Aspects.Length);
 				}
 				TrainApi.Elapse(trainApiData, sendData);
 				for (int i = 0; i < SoundHandlesCount; i++)
