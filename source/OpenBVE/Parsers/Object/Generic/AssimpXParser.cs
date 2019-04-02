@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OpenBveApi.Colors;
 using OpenBveApi.Objects;
 using OpenBveApi.Interface;
@@ -136,7 +137,7 @@ namespace OpenBve
 
 				if (mesh.Materials[i].Textures.Count > 0)
 				{
-					builder.Materials[m].DaytimeTexture = OpenBveApi.Path.CombineFile(currentFolder, mesh.Materials[i].Textures[0].Name);
+					builder.Materials[m].DaytimeTexture = OpenBveApi.Path.CombineFile(currentFolder, mesh.Materials[i].Textures[0].Name.Split('\\').Last());
 					if (!System.IO.File.Exists(builder.Materials[m].DaytimeTexture))
 					{
 						Interface.AddMessage(MessageType.Error, true, "Texure " + builder.Materials[m].DaytimeTexture + " was not found in file " + currentFile);

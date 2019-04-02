@@ -182,8 +182,17 @@ namespace OpenBve {
 			//First, check the format of the route file
 			//RW routes were written for BVE1 / 2, and have a different command syntax
 			bool IsRW = CsvRwRouteParser.isRWFile(CurrentRouteFile);
-			Program.FileSystem.AppendToLogFile("Route file format is: " + (IsRW ? "RW" : "CSV"));
-			CsvRwRouteParser.ParseRoute(CurrentRouteFile, IsRW, CurrentRouteEncoding, CurrentTrainFolder, ObjectFolder, SoundFolder, false);
+			bool IsBve5 = Bve5ScenarioParser.IsBve5(CurrentRouteFile);
+			if (IsBve5)
+			{
+				Program.FileSystem.AppendToLogFile("Route file format is: BVE5");
+				Bve5ScenarioParser.ParseScenario(CurrentRouteFile, false);
+			}
+			else
+			{
+				Program.FileSystem.AppendToLogFile("Route file format is: " + (IsRW ? "RW" : "CSV"));
+				CsvRwRouteParser.ParseRoute(CurrentRouteFile, IsRW, CurrentRouteEncoding, CurrentTrainFolder, ObjectFolder, SoundFolder, false);
+			}
 			Thread createIllustrations = new Thread(Game.RouteInformation.LoadInformation) {IsBackground = true};
 			createIllustrations.Start();
 			System.Threading.Thread.Sleep(1); if (Cancel) return;

@@ -183,6 +183,8 @@ namespace OpenBve
 			internal bool Panel2ExtendedMode;
 			internal int Panel2ExtendedMinSize;
 
+			internal bool EnableBve5TFO;
+
 			internal XParsers CurrentXParser;
 			internal ObjParsers CurrentObjParser;
 
@@ -278,6 +280,7 @@ namespace OpenBve
 				this.CursorFileName = "nk.png";
 				this.Panel2ExtendedMode = false;
 				this.Panel2ExtendedMinSize = 128;
+				this.EnableBve5TFO = false;
 				this.CurrentXParser = XParsers.Original; //Set to Michelle's original X parser by default
 				this.CurrentObjParser = ObjParsers.Original; //Set to original Obj parser by default
 			}
@@ -814,6 +817,14 @@ namespace OpenBve
 											} break;
 									}
 									break;
+							   case "bve5":
+									switch (Key)
+									{
+										case "tfo":
+											Interface.CurrentOptions.EnableBve5TFO = string.Compare(Value, "false", StringComparison.OrdinalIgnoreCase) != 0;
+											break;
+									}
+									break;
 							}
 						}
 					}
@@ -1034,6 +1045,8 @@ namespace OpenBve
 			Builder.AppendLine("cursor = " + CurrentOptions.CursorFileName);
 			Builder.AppendLine("panel2extended = " + (CurrentOptions.Panel2ExtendedMode ? "true" : "false"));
 			Builder.AppendLine("panel2extendedminsize = " + CurrentOptions.Panel2ExtendedMinSize.ToString(Culture));
+			Builder.AppendLine("[Bve5]");
+			Builder.AppendLine("tfo = " + (CurrentOptions.EnableBve5TFO ? "true" : "false"));
 			string File = OpenBveApi.Path.CombineFile(Program.FileSystem.SettingsFolder, "1.5.0/options.cfg");
 			System.IO.File.WriteAllText(File, Builder.ToString(), new System.Text.UTF8Encoding(true));
 		}

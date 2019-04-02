@@ -197,6 +197,14 @@ namespace OpenBve
 										Item.Tag = Files[i];
 									}
 									break;
+								case ".txt":
+									if (Bve5ScenarioParser.IsBve5(Files[i]))
+									{
+										ListViewItem Item = listviewRouteFiles.Items.Add(System.IO.Path.GetFileName(Files[i]));
+										Item.ImageKey = @"route";
+										Item.Tag = Files[i];
+									}
+									break;
 							}
 						}
 					}
@@ -738,7 +746,15 @@ namespace OpenBve
 			}
 			Game.Reset(false);
 			bool IsRW = string.Equals(System.IO.Path.GetExtension(Result.RouteFile), ".rw", StringComparison.OrdinalIgnoreCase);
-			CsvRwRouteParser.ParseRoute(Result.RouteFile, IsRW, Result.RouteEncoding, null, null, null, true);
+			bool IsBve5 = Bve5ScenarioParser.IsBve5(Result.RouteFile);
+			if (IsBve5)
+			{
+				Bve5ScenarioParser.ParseScenario(Result.RouteFile, true);
+			}
+			else
+			{
+				CsvRwRouteParser.ParseRoute(Result.RouteFile, IsRW, Result.RouteEncoding, null, null, null, true);
+			}
 			
 		}
 

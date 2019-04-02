@@ -83,8 +83,17 @@
     </AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr4.Runtime">
+      <HintPath>..\..\dependencies\Antlr4.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Bve5Parser">
+      <HintPath>..\..\dependencies\Bve5Parser.dll</HintPath>
+    </Reference>
     <Reference Include="CSScriptLibrary">
       <HintPath>..\..\dependencies\CSScriptLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\dependencies\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="NUniversalCharDet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -224,6 +233,16 @@
     <Compile Include="Parsers\Object\MSTS\ShapeParser.cs" />
     <Compile Include="Parsers\Panel\PanelAnimatedXmlParser.cs" />
     <Compile Include="Parsers\Panel\PanelXmlParser.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.ApplyRouteData.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.ConfirmComponents.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.ConvertComponents.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.Functions.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.LoadComponents.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.CustomDictionary.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.RouteData.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5MapParser.Structures.cs" />
+    <Compile Include="Parsers\Route\BVE5\Bve5ScenarioParser.cs" />
     <Compile Include="Parsers\Route\BVE\CsvRwRouteParser.ApplyRouteData.cs" />
     <Compile Include="Parsers\Route\BVE\CsvRwRouteParser.CompatibilityObjects.cs" />
     <Compile Include="Parsers\Route\BVE\CsvRwRouteParser.Expression.cs" />
