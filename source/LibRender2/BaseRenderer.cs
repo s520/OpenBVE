@@ -339,7 +339,7 @@ namespace LibRender2
 				StartingDistance = startingDistance,
 				EndingDistance = endingDistance
 			});
-			
+
 			foreach (MeshFace face in Prototype.Mesh.Faces)
 			{
 				switch (face.Flags & MeshFace.FaceTypeMask)
@@ -430,7 +430,7 @@ namespace LibRender2
 				StartingDistance = startingDistance,
 				EndingDistance = endingDistance
 			});
-			
+
 			foreach (MeshFace face in Prototype.Mesh.Faces)
 			{
 				switch (face.Flags & MeshFace.FaceTypeMask)
@@ -966,6 +966,16 @@ namespace LibRender2
 				{
 					alphaFactor = 1.0f;
 				}
+				
+				if (material.NighttimeTexture != null)
+				{
+					alphaFactor *= Lighting.OptionLightingResultingAmount - inv255 * material.DaytimeNighttimeBlend;
+				}
+
+				if (alphaFactor < 0.0f)
+				{
+					alphaFactor = 0.0f;
+				}
 
 				if (material.BlendMode == MeshMaterialBlendMode.Additive)
 				{
@@ -1093,7 +1103,7 @@ namespace LibRender2
 				{
 					GL.LoadMatrix(matrixPointer);
 				}
-				
+
 				double* matrixPointer2 = &modelMatrix.Row0.X;
 				{
 					GL.MultMatrix(matrixPointer2);
@@ -1105,9 +1115,9 @@ namespace LibRender2
 				{
 					GL.LoadMatrix(matrixPointer);
 				}
-				
+
 			}
-			
+
 
 			if (OptionWireFrame)
 			{
@@ -1206,6 +1216,21 @@ namespace LibRender2
 					alphaFactor = (float)Glow.GetDistanceFactor(modelMatrix, vertices, ref Face, material.GlowAttenuationData);
 				}
 				else
+				{
+					alphaFactor = 1.0f;
+				}
+
+				if (material.NighttimeTexture != null)
+				{
+					alphaFactor *= Lighting.OptionLightingResultingAmount - inv255 * material.DaytimeNighttimeBlend;
+				}
+
+				if (alphaFactor < 0.0f)
+				{
+					alphaFactor = 0.0f;
+				}
+
+				if (alphaFactor > 1.0f)
 				{
 					alphaFactor = 1.0f;
 				}
